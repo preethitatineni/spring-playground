@@ -1,6 +1,8 @@
 package com.example;
 
 
+import com.example.service.MathService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,49 +19,20 @@ import java.util.Map;
 @RestController
 public class MathController {
 
+    @Autowired
+    MathService mathService;
+
     @GetMapping("/math/calculate")
     public String mathCalculate(@RequestParam(defaultValue = "add") String operation, @RequestParam int x, @RequestParam int y){
-        String operationSymbol = null;
-        int totalValue = 0;
-        switch (operation) {
-            case "add":
-                operationSymbol = "+";
-                totalValue = x + y;
-                break;
-            case "subtract":
-                operationSymbol = "-";
-                totalValue = x - y;
-                break;
-            case "multiply":
-                operationSymbol = "*";
-                totalValue = x * y;
-                break;
-            case "divide":
-                operationSymbol= "/";
-                totalValue = x / y;
-        }
-        return String.format("%s %s %s = %s", x, operationSymbol, y, totalValue);
+        return mathService.mathCalculate(operation, x, y);
     }
 
     @PostMapping("/math/sum")
     public String mathSum(@RequestParam MultiValueMap<String, String> n){
-        StringBuilder builder = new StringBuilder();
         Iterator iterator = n.values().iterator();
         List<String> valueList = null;
-        int totalValue = 0;
-        int currentVal = 0;
         valueList = (List) iterator.next();
-        for(String str : valueList) {
-            if(!builder.toString().isEmpty()){
-                builder.append(" + ");
-            }
-            currentVal = Integer.valueOf(str);
-            builder.append(currentVal);
-            totalValue += currentVal;
-        }
-
-        builder.append(" = " + totalValue);
-        return builder.toString();
+        return mathService.mathSum(valueList);
     }
 
 
