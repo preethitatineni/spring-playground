@@ -9,6 +9,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -54,5 +55,12 @@ public class MathControllerTest {
         this.mvc.perform(get("/math/calculate?operation=divide&x=50&y=25").accept(MediaType.TEXT_PLAIN))
                 .andExpect(status().isOk())
                 .andExpect(content().string("50 / 25 = 2"));
+    }
+
+    @Test
+    public void testMathSumThreeParameters() throws Exception {
+        this.mvc.perform(post("/math/sum?n=3&n=50&n=25").accept(MediaType.TEXT_PLAIN))
+                .andExpect(status().isOk())
+                .andExpect(content().string("3 + 50 + 25 = 78"));
     }
 }
