@@ -50,7 +50,7 @@ public class MathServiceTest {
     }
 
     @Test
-    public void testMathDivide(){
+    public void testMathDivide(){ 
         assertEquals("5 / 5 = 1", service.mathCalculate("divide", 5   , 5));
     }
 
@@ -62,10 +62,4 @@ public class MathServiceTest {
         values.add("23");
         assertEquals("5 + 7 + 23 = 35", service.mathSum(values));
     }
-
-
-
-
-
-
 }
