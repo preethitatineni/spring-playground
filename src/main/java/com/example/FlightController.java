@@ -1,11 +1,12 @@
 package com.example;
 
+import com.example.model.Flight;
+import com.example.model.Passenger;
+import com.example.model.Ticket;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -16,23 +17,23 @@ import java.util.*;
 public class FlightController {
 
     @GetMapping("flights/flight")
-    public @ResponseBody Flight getFlight(){
+    public @ResponseBody
+    Flight getFlight(){
         Flight flight = new Flight();
         Date departs = new Date();
         Calendar cal = Calendar.getInstance();
         departs = cal.getTime();
-        flight.departs = departs;
+        flight.setDeparts(departs);
 
         List<Ticket> tickets = new ArrayList<>();
         Ticket ticket = new Ticket();
         Passenger passenger = new Passenger();
-        passenger.firstName = "FirstName";
-        passenger.lastName = "LastName";
-        ticket.passenger = passenger;
-        ticket.price = 200;
+        passenger.setFirstName("FirstName");
+        passenger.setLastName("LastName");
+        ticket.setPassenger(passenger);
+        ticket.setPrice(200);
         tickets.add(ticket);
-        flight.tickets = tickets;
-
+        flight.setTickets(tickets);
         return flight;
     }
 
@@ -43,87 +44,28 @@ public class FlightController {
         Date departs = new Date();
         Calendar cal = Calendar.getInstance();
         departs = cal.getTime();
-        flight.departs = departs;
+        flight.setDeparts(departs);
 
         List<Ticket> tickets = new ArrayList<>();
         Ticket ticket = new Ticket();
         Passenger passenger = new Passenger();
-        passenger.firstName = "FirstName";
+        passenger.setFirstName("FirstName");
         //passenger.lastName = "LastName";
-        ticket.passenger = passenger;
-        ticket.price = 200;
+        ticket.setPassenger(passenger);
+        ticket.setPrice(200);
         tickets.add(ticket);
-        flight.tickets = tickets;
+        flight.setTickets(tickets);
         flights.add(flight);
         return flights;
     }
 
-    static class Flight{
-        public Date getDeparts() {
-            return departs;
+    @PostMapping("/flights/tickets/total")
+    public String ticketsTotal(@RequestBody List<Ticket> ticketList){
+        int result = 0;
+        for(Ticket ticket : ticketList){
+            result += ticket.getPrice();
         }
-
-        public void setDeparts(Date departs) {
-            this.departs = departs;
-        }
-
-        @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
-                @JsonProperty("Departs")
-        Date departs = new Date();
-
-        public List<Ticket> getTickets() {
-            return tickets;
-        }
-
-        public void setTickets(List<Ticket> tickets) {
-            this.tickets = tickets;
-        }
-        @JsonProperty("Tickets")
-        List<Ticket> tickets = Collections.emptyList();
-    }
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    static class Ticket{
-        public Passenger getPassenger() {
-            return passenger;
-        }
-
-        public void setPassenger(Passenger passenger) {
-            this.passenger = passenger;
-        }
-        @JsonProperty("Passenger")
-        Passenger passenger = new Passenger();
-
-        public int getPrice() {
-            return price;
-        }
-
-        public void setPrice(int price) {
-            this.price = price;
-        }
-
-        @JsonProperty("Price")
-        int price = 0;
-    }
-
-    static class Passenger{
-        public String getFirstName() {
-            return firstName;
-        }
-
-        public void setFirstName(String firstName) {
-            this.firstName = firstName;
-        }
-
-        public String getLastName() {
-            return lastName;
-        }
-
-        public void setLastName(String lastName) {
-            this.lastName = lastName;
-        }
-        @JsonProperty("FirstName")
-        String firstName;
-        String lastName;
+        String response = String.format("{ \"result\":  %s }", result);
+        return response;
     }
 }
