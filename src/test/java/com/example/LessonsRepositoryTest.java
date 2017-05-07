@@ -15,8 +15,11 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 
 import javax.transaction.Transactional;
 
+import java.sql.Date;
+
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -62,5 +65,25 @@ public class LessonsRepositoryTest {
         this.mvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(lesson.getId().intValue()) ));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void testPatchLessonById() throws Exception{
+        Lesson initialLesson = new Lesson();
+        initialLesson.setTitle("Initial Lesson");
+        initialLesson.setDeliveredOn(Date.valueOf("2017-05-04"));
+        Lesson savedLesson = repository.save(initialLesson);
+
+        MockHttpServletRequestBuilder request = patch("/lessons/"+savedLesson.getId())
+                .contentType(MediaType.APPLICATION_JSON).content("{\n" +
+                        "  \"title\": \"Updated Lesson\",\n" +
+                        "  \"deliveredOn\": \"2017-04-12\"\n" +
+                        "}");
+
+        this.mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title", equalTo("Updated Lesson")));
     }
 }
