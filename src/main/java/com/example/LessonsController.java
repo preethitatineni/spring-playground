@@ -4,6 +4,9 @@ import com.example.model.Lesson;
 import com.example.repositories.LessonRepository;
 import org.springframework.web.bind.annotation.*;
 
+
+import java.sql.Date;
+
 import static org.apache.coyote.http11.Constants.a;
 
 /**
@@ -43,6 +46,16 @@ public class LessonsController {
     public Lesson update(@PathVariable Long id, @RequestBody Lesson lesson){
         lesson.setId(id);
         return repository.save(lesson);
+    }
+
+    @GetMapping("/find/{title}")
+    public Lesson findByTitle(@PathVariable String title){
+        return repository.findByTitle(title);
+    }
+
+    @GetMapping("/between")
+    public Lesson findBetween(@RequestParam Date date1, @RequestParam Date date2){
+        return repository.findByDeliveredOnAfterAndDeliveredOnBefore(date1, date2);
     }
 
 }

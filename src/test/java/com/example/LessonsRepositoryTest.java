@@ -86,4 +86,37 @@ public class LessonsRepositoryTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title", equalTo("Updated Lesson")));
     }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void testFindByTitle() throws Exception{
+        Lesson lesson = new Lesson();
+        lesson.setTitle("LessonTitle");
+        lesson.setDeliveredOn(Date.valueOf("2017-05-05"));
+        repository.save(lesson);
+
+        MockHttpServletRequestBuilder request = get("/lessons/find/LessonTitle");
+
+        this.mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title", equalTo("LessonTitle")));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void testFindBetweenDates() throws Exception{
+        Lesson lesson = new Lesson();
+        lesson.setTitle("BetweenDate");
+        lesson.setDeliveredOn(Date.valueOf("2013-04-20"));
+        repository.save(lesson);
+
+        MockHttpServletRequestBuilder request = get("/lessons/between?date1=2013-04-15&date2=2013-05-05");
+
+        this.mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title", equalTo("BetweenDate")))
+                .andExpect(jsonPath("$.deliveredOn", equalTo("2013-04-20")));
+    }
 }
