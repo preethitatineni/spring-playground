@@ -27,4 +27,14 @@ public class LessonsController {
         return this.repository.save(lesson);
     }
 
+    @GetMapping("/{id}")
+    public Lesson getLessonById(@PathVariable Long id){
+        return repository.findOne(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable Long id){
+        repository.delete(id);
+    }
+
 }
