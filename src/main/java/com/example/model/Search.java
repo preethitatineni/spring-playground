@@ -18,22 +18,20 @@ import java.util.Map;
 })
 public class Search {
 
-    @JsonProperty("Title")
+//    @JsonProperty("Title")
     private String title;
 
-    @JsonProperty("Year")
+//    @JsonProperty("Year")
     private String year;
 
-    @JsonProperty("imdbID")
+//    @JsonProperty("imdbID")
     private String imdbID;
 
-    @JsonProperty("Type")
+//    @JsonProperty("Type")
     private String type;
 
-    @JsonProperty("Poster")
+//    @JsonProperty("Poster")
     private String poster;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("title")
     public String getTitle() {
@@ -84,17 +82,7 @@ public class Search {
     public void setPoster(String poster) {
         this.poster = poster;
     }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
+    
 }
 
 
