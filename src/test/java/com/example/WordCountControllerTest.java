@@ -30,12 +30,15 @@ public class WordCountControllerTest {
     @Test
     public void testCounter() throws Exception {
         MockHttpServletRequestBuilder request = post("/words/count").contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content("January February March March");
+                .content("The BROWN cow jumps over a brown fox");
 
         this.mvc.perform(request)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.January").value(1))
-                .andExpect(jsonPath("$.February").value(1))
-                .andExpect(jsonPath("$.March").value(2));
+                .andExpect(jsonPath("$.brown").value(1))
+                .andExpect(jsonPath("$.BROWN").value(1))
+                .andExpect(jsonPath("$.cow").value(1))
+                .andExpect(jsonPath("$.jumps").value(1))
+                .andExpect(jsonPath("$.over").value(1))
+                .andExpect(jsonPath("$.fox").value(1));
     }
 }
