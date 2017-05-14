@@ -26,4 +26,9 @@ public class MoviesController {
         OmdbResponse omdbResponse = response.getBody();
         return omdbResponse.getSearch();
     }
+
+    public RestTemplate getTemplate(){
+        return template;
+    }
+
 }
